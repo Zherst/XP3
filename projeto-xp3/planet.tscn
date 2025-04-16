@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://ct6icwrtgufd8"]
+
+[ext_resource type="Script" uid="uid://bc3il0opvpacl" path="res://Scripts/planet.gd" id="1_1odxm"]
+[ext_resource type="Script" uid="uid://bgvespodjxofo" path="res://Scripts/planetMeshFace.gd" id="2_mtr83"]
+
+[node name="Planet" type="Node3D"]
+script = ExtResource("1_1odxm")
+
+[node name="Up" type="MeshInstance3D" parent="."]
+script = ExtResource("2_mtr83")
+normal = null
