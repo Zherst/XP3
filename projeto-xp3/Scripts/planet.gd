@@ -2,14 +2,14 @@
 extends Node
 
 @export var planet_data: PlanetData:
-		set(val):
-			if planet_data:
-				planete_data.changed.disconnect(_on_resource_changed)
-			planet_data = val
-			if planet_data: 
-				planet_data.changed.connect(_on_resource_changed)
-		get:
-			return planet_data
+	set(val):
+		if planet_data:  # Disconnect the old resource signal if it exists
+			planet_data.changed.disconnect(_on_resource_changed)
+		planet_data = val
+		if planet_data:  # Connect the new resource signal
+			planet_data.changed.connect(_on_resource_changed)
+	get:
+		return planet_data
 
 func _on_resource_changed():
 	planet_data.min_height = 99999.0
@@ -17,4 +17,5 @@ func _on_resource_changed():
 	for child in get_children():
 		var face = child as PlanetMeshFace
 		if face:
-			face.regenerate_mash(planet_data)
+			face.regenerate_mesh(planet_data)
+	
