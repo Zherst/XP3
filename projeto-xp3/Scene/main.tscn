@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://cjunouxtm3bl7"]
+
+[ext_resource type="Script" uid="uid://t4fqg24t8o8m" path="res://Scripts/OrbitManager.gd" id="1_f6udf"]
+[ext_resource type="PackedScene" uid="uid://ct6icwrtgufd8" path="res://Scene/planet.tscn" id="2_sblpm"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_sblpm"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sblpm"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_f6udf"]
+
+[node name="Main" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 28.5575, 0)
+
+[node name="Origin" type="Node3D" parent="."]
+
+[node name="OriginMesh" type="MeshInstance3D" parent="Origin"]
+mesh = SubResource("SphereMesh_sblpm")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Origin/OriginMesh"]
+light_energy = 16.0
+omni_range = 40.1196
+
+[node name="RigidBody3D" type="RigidBody3D" parent="Origin" node_paths=PackedStringArray("center_node")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 0)
+script = ExtResource("1_f6udf")
+center_node = NodePath("../OriginMesh")
+center_mass = 100.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Origin/RigidBody3D"]
+shape = SubResource("SphereShape3D_sblpm")
+
+[node name="Planet" parent="Origin/RigidBody3D" instance=ExtResource("2_sblpm")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
+mesh = SubResource("SphereMesh_f6udf")

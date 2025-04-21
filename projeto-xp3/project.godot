@@ -14,3 +14,8 @@ config/name="Projeto XP3"
 run/main_scene="uid://cjunouxtm3bl7"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[physics]
+
+3d/default_gravity=0.0
+3d/default_gravity_vector=Vector3(0, 0, 0)
