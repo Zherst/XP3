@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqratwydj04j0"]
+
+[ext_resource type="PackedScene" uid="uid://ee5o0d5d3hay" path="res://personagem_a.tscn" id="1_y2yqg"]
+[ext_resource type="Script" uid="uid://br30rofl3rhev" path="res://personagem_a.gd" id="2_fji6l"]
+
+[node name="3D" type="Node3D"]
+
+[node name="PersonagemA" parent="." instance=ExtResource("1_y2yqg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.644726, 4.66689, -0.244796)
+script = ExtResource("2_fji6l")
