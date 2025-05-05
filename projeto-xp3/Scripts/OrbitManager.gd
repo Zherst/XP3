@@ -1,5 +1,4 @@
-@tool
-extends RigidBody3D
+extends Node3D
 
 @export var G: float = 9.8
 @export var center_node: Node3D
@@ -7,7 +6,7 @@ extends RigidBody3D
 @export var orbit_anomaly: float = 0.0
 @export var inclination_degrees: float = 0.0
 @export var orbit_points: int = 128
-@export var self_rotation_speed: float = 20.0  # graus por segundo
+@export var self_rotation_speed: float = 0.0
 
 var semi_major_axis: float
 var semi_minor_axis: float
@@ -32,18 +31,18 @@ func _process(delta):
 func update_position(delta):
 	if not center_node:
 		return
+	else:
+		var distance = calculate_distance_to_center(angle)
+		velocity = sqrt(G * center_mass * (2.0 / distance - 1.0 / semi_major_axis))
+		angle += velocity * delta / distance
 
-	var distance = calculate_distance_to_center(angle)
-	velocity = sqrt(G * center_mass * (2.0 / distance - 1.0 / semi_major_axis))
-	angle += velocity * delta / distance
-
-	var orbit_pos = calculate_ellipse_pos(angle)
-	global_transform.origin = center_node.global_transform.origin + orbit_pos
+		var orbit_pos = calculate_ellipse_pos(angle)
+		global_transform.origin = center_node.global_transform.origin + orbit_pos
 
 func rotate_self(delta):
 	rotate_y(deg_to_rad(self_rotation_speed) * delta)
 
-func calculate_ellipse_pos(angle: float) -> Vector3:
+func calculate_ellipse_pos(angle) -> Vector3:
 	var x = semi_major_axis * cos(angle)
 	var z = semi_minor_axis * sin(angle)
 
@@ -54,7 +53,7 @@ func calculate_ellipse_pos(angle: float) -> Vector3:
 
 	return Vector3(rotated_x, 0.0, rotated_z)
 
-func calculate_distance_to_center(angle: float) -> float:
+func calculate_distance_to_center(angle):
 	var x = semi_major_axis * cos(angle)
 	var z = semi_minor_axis * sin(angle)
 	return sqrt(x * x + z * z)
@@ -78,8 +77,7 @@ func draw_orbit_path():
 	orbit_mesh_instance.mesh = mesh
 
 	orbit_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	orbit_material.albedo_color = Color.CYAN
-	orbit_material.line_width = 3.0
+	orbit_material.albedo_color = Color.WHITE
 	orbit_mesh_instance.material_override = orbit_material
 
 	center_node.add_child(orbit_mesh_instance)

@@ -8,7 +8,7 @@ varying float height;
 
 void vertex() {
 	height = length(VERTEX);
-	
+
 }
 
 void fragment() {

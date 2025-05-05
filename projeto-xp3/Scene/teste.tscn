@@ -1,0 +1,70 @@
+[gd_scene load_steps=10 format=3 uid="uid://djgvaculm4stc"]
+
+[ext_resource type="PackedScene" uid="uid://br2pl52tr77ft" path="res://Scene/Planet.tscn" id="1_wkh5q"]
+[ext_resource type="PackedScene" uid="uid://bnlfhn34us0pv" path="res://Scene/Player.tscn" id="2_vo06n"]
+[ext_resource type="Shader" uid="uid://dk6xm66bkg05b" path="res://Shader/SunFlare.gdshader" id="3_vo06n"]
+
+[sub_resource type="Gradient" id="Gradient_a5ese"]
+offsets = PackedFloat32Array(0, 0.238245, 0.394984, 0.605016, 0.658307, 0.780564)
+colors = PackedColorArray(0.978056, 0.978056, 0.978056, 1, 0.285535, 0.800358, 0.870973, 1, 1, 0.898039, 0, 1, 0.984314, 0, 0, 1, 3.85046e-07, 0.877198, 0.899967, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3amdw"]
+gradient = SubResource("Gradient_a5ese")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="Gradient" id="Gradient_tplvc"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_o1dkv"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_75buv"]
+color_ramp = SubResource("Gradient_tplvc")
+noise = SubResource("FastNoiseLite_o1dkv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dqp5o"]
+shader = ExtResource("3_vo06n")
+shader_parameter/FlareMult = SubResource("GradientTexture2D_3amdw")
+shader_parameter/FlareMult2 = SubResource("NoiseTexture2D_75buv")
+shader_parameter/Blur = 5.0
+shader_parameter/FlareThreshold = 1.0
+shader_parameter/Flares = 4
+shader_parameter/FlareSpacing = 0.6
+shader_parameter/Intensity = 8.0
+shader_parameter/Saturation_ = 0.5
+
+[node name="Teste" type="Node3D"]
+
+[node name="Planet2" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("1_wkh5q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 93.6917)
+center_node = NodePath("../Planet")
+center_mass = 100.0
+
+[node name="Planet" parent="." instance=ExtResource("1_wkh5q")]
+
+[node name="Player" parent="." instance=ExtResource("2_vo06n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 159.077, -43.1999, -52.8598)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.6716, 18.9727, 0)
+light_energy = 16.0
+omni_range = 47.9195
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+material = SubResource("ShaderMaterial_dqp5o")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1

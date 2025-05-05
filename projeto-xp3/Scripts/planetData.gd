@@ -16,8 +16,9 @@ extends Resource
 		emit_changed()
 		
 @export var planet_noise: Array = [] :
-	set(val):
+	set(val): 
 		planet_noise = val
+	
 		for n in planet_noise:
 			if n:  # Disconnect the old resource signal if it exists
 				n.changed.disconnect(_on_resource_changed)
