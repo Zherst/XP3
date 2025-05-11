@@ -27,6 +27,9 @@ sky = SubResource("Sky_1xcnr")
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.984688, 0, 0)
 
+[node name="Player" parent="." instance=ExtResource("3_r34rm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120.888, -40.1183, 0)
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ow1sv")
 
@@ -39,5 +42,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 123.089, 0, 0.123596)
 G = 20.0
 center_node = NodePath("../Origin")
 
-[node name="Player" parent="." instance=ExtResource("3_r34rm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 127.292, 14.8324, -1.76439)
+[node name="Planet2" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("2_sblpm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191.091, 0, 0)
+center_node = NodePath("../Origin")

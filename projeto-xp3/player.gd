@@ -1,7 +1,7 @@
 extends  CharacterBody3D
 
 @export var speed := 12.0
-@export var jump_strength := 20.0
+@export var jump_strength := 30.0
 
 @export var velocity_control_floor := 50.0
 @export var velocity_control_air := 5.0
@@ -11,6 +11,11 @@ extends  CharacterBody3D
 
 @onready var _balance_point: BalancePoint = $BalancePoint
 @onready var _camera_anchor: CameraAnchor = $CameraAnchor
+
+var is_anchored = false
+var anchor_parent = null
+var anchor_distance = 30.0
+@onready var ground_ray = $RayCast3D
 
 static func get_movement_input() -> Vector2:
 	var vector := Vector2(
@@ -36,6 +41,18 @@ static func project_movement_intention(basis: Basis, up: Vector3, movement_input
 func _physics_process(delta: float) -> void:
 	
 	_camera_anchor.target_origin = _balance_point.global_transform.origin
+
+	if (!is_anchored and ground_ray.is_colliding()):
+		var collider = ground_ray.get_collider()
+		if collider is StaticBody3D:
+			anchor_to_planet(collider)
+			print(collider)
+	
+	if is_anchored and anchor_parent:
+		var dist = global_transform.origin.distance_to(anchor_parent.global_transform.origin) 
+		if dist > anchor_distance:
+			unanchor_to_planet()
+			print('saiu')
 	
 	var acceleration := _balance_point.acceleration
 	if acceleration == Vector3.ZERO:
@@ -55,6 +72,7 @@ func _physics_process(delta: float) -> void:
 	
 	var current_velocity_control: float
 	var current_torque_control: float
+	
 	if self.is_on_floor():
 		current_velocity_control = velocity_control_floor
 		current_torque_control = torque_control_floor
@@ -101,9 +119,19 @@ func _process_turning(movement_intention: Vector3, control: float):
 	else:
 		look_intention_horizontal = forward - forward.project(up)
 	
-	var look_intention := Basis.looking_at(look_intention_horizontal, up)
+	var look_intention := Basis.IDENTITY.looking_at(look_intention_horizontal, -up)
 	transform = Transform3D(
 		transform.basis.slerp(look_intention, control).orthonormalized(),
 		transform.origin
 	)
 	
+func anchor_to_planet(planet):
+	self.reparent(planet)
+	is_anchored = true
+	anchor_parent = planet
+	
+func unanchor_to_planet():
+	if anchor_parent:
+		self.reparent(get_tree().root)
+		is_anchored = false
+		anchor_parent = null

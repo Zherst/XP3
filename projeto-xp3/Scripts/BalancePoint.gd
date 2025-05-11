@@ -1,5 +1,5 @@
 class_name BalancePoint
-extends Area3D
+extends Node3D
 
 var relevant_forces: Array = []
 

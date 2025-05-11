@@ -4,10 +4,9 @@ extends Node3D
 @export var center_node: Node3D
 @export var center_mass: float = 1.0
 @export var orbit_anomaly: float = 0.0
-@export var inclination_degrees: float = 0.0
 @export var orbit_points: int = 128
-@export var self_rotation_speed: float = 0.0
 
+@onready var fall_off = $PlanetMesh/GravityWell/FallOffModel
 var semi_major_axis: float
 var semi_minor_axis: float
 var angle: float = 0.0
@@ -17,6 +16,7 @@ var orbit_mesh_instance: MeshInstance3D
 var orbit_material := StandardMaterial3D.new()
 
 func _ready():
+	fall_off.max_acceleration = G
 	if center_node:
 		var offset = global_transform.origin - center_node.global_transform.origin
 		semi_major_axis = offset.length()
@@ -26,7 +26,6 @@ func _ready():
 
 func _process(delta):
 	update_position(delta)
-	rotate_self(delta)
 
 func update_position(delta):
 	if not center_node:
@@ -39,19 +38,11 @@ func update_position(delta):
 		var orbit_pos = calculate_ellipse_pos(angle)
 		global_transform.origin = center_node.global_transform.origin + orbit_pos
 
-func rotate_self(delta):
-	rotate_y(deg_to_rad(self_rotation_speed) * delta)
-
 func calculate_ellipse_pos(angle) -> Vector3:
 	var x = semi_major_axis * cos(angle)
 	var z = semi_minor_axis * sin(angle)
 
-	# Inclinação da órbita no plano XZ (eixo Y)
-	var inclination = deg_to_rad(inclination_degrees)
-	var rotated_x = x * cos(inclination) - z * sin(inclination)
-	var rotated_z = x * sin(inclination) + z * cos(inclination)
-
-	return Vector3(rotated_x, 0.0, rotated_z)
+	return Vector3(x, 0.0, z)
 
 func calculate_distance_to_center(angle):
 	var x = semi_major_axis * cos(angle)

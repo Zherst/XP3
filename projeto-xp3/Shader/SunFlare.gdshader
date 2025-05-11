@@ -25,7 +25,7 @@ void fragment(){
 	vec2 FlippedUV = vec2(1.0) - SCREEN_UV;
 	vec2 FlareVector = (vec2(0.5) - SCREEN_UV) * FlareSpacing;
 	vec3 FinalFlare = vec3(0.0);
-	
+
 	for (int i = 0; i < Flares; ++i){
 		vec2 SUV = fract(SCREEN_UV + FlareVector * vec2(float(i)));
 		float Dist = distance(SUV, vec2(0.5));

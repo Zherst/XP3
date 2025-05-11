@@ -12,6 +12,7 @@ extends Node
 		return planet_data
 	
 func _ready():
+	add_to_group("planet")
 	for child in get_children():
 		if child is MeshInstance3D:
 			_update_collision(child)
@@ -29,7 +30,10 @@ func _on_resource_changed():
 func _update_collision(mesh_instance: MeshInstance3D):
 
 	for grandchild in mesh_instance.get_children():
-		if grandchild is StaticBody3D or grandchild is CollisionShape3D:
+		if grandchild is StaticBody3D or CollisionShape3D:
 			grandchild.queue_free()
 	
 	mesh_instance.create_convex_collision(true,true)
+	var coli = mesh_instance.get_children()
+	if coli is StaticBody3D:
+		coli.add_to_group("planet")

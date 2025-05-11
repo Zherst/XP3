@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bnlfhn34us0pv"]
+[gd_scene load_steps=9 format=3 uid="uid://bnlfhn34us0pv"]
 
 [ext_resource type="Script" uid="uid://dtjihhmkxqqhb" path="res://player.gd" id="1_6l3be"]
 [ext_resource type="Script" uid="uid://b21tvtg0kk2bp" path="res://Scripts/CameraAnchor.gd" id="2_jvxg0"]
@@ -10,6 +10,8 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6l3be"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_fvocf"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_mud5u"]
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_6l3be")
@@ -35,6 +37,13 @@ margin = 0.2
 script = ExtResource("3_mud5u")
 
 [node name="Camera3D" type="Camera3D" parent="CameraAnchor/CameraArm"]
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -5, 0)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02775, 0)
+mesh = SubResource("SphereMesh_mud5u")
 
 [connection signal="area_entered" from="BalancePoint" to="BalancePoint" method="_on_area_entered"]
 [connection signal="area_exited" from="BalancePoint" to="BalancePoint" method="_on_area_exited"]

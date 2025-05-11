@@ -14,7 +14,7 @@ func reconfigure_from_params():
 	_b = pow(start_radius - _a, 2)
 	
 func get_acceleration_at_distance(distance: float) -> float:
-	var adjusted_distance = max(0.0001, distance - _a)
+	var adjusted_distance = max(0.001, distance - _a)
 	var influence = min(1, _b / (adjusted_distance * adjusted_distance))
 	return influence * max_acceleration
 	

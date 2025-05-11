@@ -35,15 +35,8 @@ shader_parameter/Saturation_ = 0.5
 
 [node name="Teste" type="Node3D"]
 
-[node name="Planet2" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("1_wkh5q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 93.6917)
-center_node = NodePath("../Planet")
-center_mass = 100.0
-
-[node name="Planet" parent="." instance=ExtResource("1_wkh5q")]
-
 [node name="Player" parent="." instance=ExtResource("2_vo06n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 159.077, -43.1999, -52.8598)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 28.7016, 0)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.6716, 18.9727, 0)
@@ -68,3 +61,5 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+
+[node name="Planet" parent="." instance=ExtResource("1_wkh5q")]
