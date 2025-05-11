@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3 uid="uid://cjunouxtm3bl7"]
+
+[ext_resource type="Shader" uid="uid://dxjotdkhakm2r" path="res://Shader/Skybox.gdshader" id="1_2wwxx"]
+[ext_resource type="PackedScene" uid="uid://bh0jdnuunto56" path="res://Scene/sun.tscn" id="2_2wwxx"]
+[ext_resource type="PackedScene" uid="uid://br2pl52tr77ft" path="res://Scene/Planet.tscn" id="2_sblpm"]
+[ext_resource type="PackedScene" uid="uid://bnlfhn34us0pv" path="res://Scene/Player.tscn" id="3_r34rm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3amdw"]
+shader = ExtResource("1_2wwxx")
+shader_parameter/sky_color = Color(0.03, 0.05, 0.11, 1)
+shader_parameter/star_base_color = Color(0.999999, 0.799595, 0.309594, 1)
+shader_parameter/star_hue_offset = 1.0
+shader_parameter/star_intensity = 0.08
+shader_parameter/star_twinkle_speed = 0.8
+shader_parameter/star_twinkle_intensity = 0.2
+shader_parameter/layer_scale = 20.0
+shader_parameter/layer_scale_step = 10.0
+shader_parameter/layers_count = 5
+
+[sub_resource type="Sky" id="Sky_1xcnr"]
+sky_material = SubResource("ShaderMaterial_3amdw")
+
+[sub_resource type="Environment" id="Environment_ow1sv"]
+background_mode = 2
+sky = SubResource("Sky_1xcnr")
+
+[node name="Main" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.984688, 0, 0)
+
+[node name="Player" parent="." instance=ExtResource("3_r34rm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120.888, -40.1183, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ow1sv")
+
+[node name="Origin" type="Node3D" parent="."]
+
+[node name="Sun" parent="Origin" instance=ExtResource("2_2wwxx")]
+
+[node name="Planet" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("2_sblpm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 123.089, 0, 0.123596)
+G = 20.0
+center_node = NodePath("../Origin")
+
+[node name="Planet2" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("2_sblpm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191.091, 0, 0)
+center_node = NodePath("../Origin")

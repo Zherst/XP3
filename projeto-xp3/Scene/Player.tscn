@@ -1,0 +1,49 @@
+[gd_scene load_steps=9 format=3 uid="uid://bnlfhn34us0pv"]
+
+[ext_resource type="Script" uid="uid://dtjihhmkxqqhb" path="res://player.gd" id="1_6l3be"]
+[ext_resource type="Script" uid="uid://b21tvtg0kk2bp" path="res://Scripts/CameraAnchor.gd" id="2_jvxg0"]
+[ext_resource type="Script" uid="uid://beyup2uulwmtq" path="res://Scripts/BalancePoint.gd" id="2_mud5u"]
+[ext_resource type="Script" uid="uid://c55oaqtohexy4" path="res://Scripts/CameraJoint.gd" id="3_mud5u"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_j8lcb"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6l3be"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_fvocf"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_mud5u"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_6l3be")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_j8lcb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_6l3be")
+
+[node name="BalancePoint" type="Area3D" parent="."]
+script = ExtResource("2_mud5u")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BalancePoint"]
+shape = SubResource("SphereShape3D_fvocf")
+
+[node name="CameraAnchor" type="Node3D" parent="."]
+script = ExtResource("2_jvxg0")
+
+[node name="CameraArm" type="SpringArm3D" parent="CameraAnchor"]
+spring_length = 18.0
+margin = 0.2
+script = ExtResource("3_mud5u")
+
+[node name="Camera3D" type="Camera3D" parent="CameraAnchor/CameraArm"]
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -5, 0)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02775, 0)
+mesh = SubResource("SphereMesh_mud5u")
+
+[connection signal="area_entered" from="BalancePoint" to="BalancePoint" method="_on_area_entered"]
+[connection signal="area_exited" from="BalancePoint" to="BalancePoint" method="_on_area_exited"]
