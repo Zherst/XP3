@@ -1,10 +1,12 @@
 extends Node3D
 
 @export var G: float = 9.8
+@export var G_area: float = 52
 @export var center_node: Node3D
 @export var center_mass: float = 1.0
 @export var orbit_anomaly: float = 0.0
 @export var orbit_points: int = 128
+@export var color: Color = Color.WHITE
 
 @onready var fall_off = $PlanetMesh/GravityWell/FallOffModel
 var semi_major_axis: float
@@ -17,6 +19,7 @@ var orbit_material := StandardMaterial3D.new()
 
 func _ready():
 	fall_off.max_acceleration = G
+	fall_off.start_radius = G_area
 	if center_node:
 		var offset = global_transform.origin - center_node.global_transform.origin
 		semi_major_axis = offset.length()
@@ -68,7 +71,7 @@ func draw_orbit_path():
 	orbit_mesh_instance.mesh = mesh
 
 	orbit_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	orbit_material.albedo_color = Color.WHITE
+	orbit_material.albedo_color = color
 	orbit_mesh_instance.material_override = orbit_material
 
 	center_node.add_child(orbit_mesh_instance)

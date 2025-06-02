@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://djgvaculm4stc"]
+[gd_scene load_steps=11 format=3 uid="uid://djgvaculm4stc"]
 
 [ext_resource type="PackedScene" uid="uid://br2pl52tr77ft" path="res://Scene/Planet.tscn" id="1_wkh5q"]
-[ext_resource type="PackedScene" uid="uid://bnlfhn34us0pv" path="res://Scene/Player.tscn" id="2_vo06n"]
 [ext_resource type="Shader" uid="uid://dk6xm66bkg05b" path="res://Shader/SunFlare.gdshader" id="3_vo06n"]
+[ext_resource type="PackedScene" uid="uid://b1gbjkk030tux" path="res://Scene/points_group.tscn" id="4_a5ese"]
+[ext_resource type="PackedScene" uid="uid://bnlfhn34us0pv" path="res://Scene/Player.tscn" id="4_tplvc"]
 
 [sub_resource type="Gradient" id="Gradient_a5ese"]
 offsets = PackedFloat32Array(0, 0.238245, 0.394984, 0.605016, 0.658307, 0.780564)
@@ -35,9 +36,6 @@ shader_parameter/Saturation_ = 0.5
 
 [node name="Teste" type="Node3D"]
 
-[node name="Player" parent="." instance=ExtResource("2_vo06n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 28.7016, 0)
-
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.6716, 18.9727, 0)
 light_energy = 16.0
@@ -63,3 +61,9 @@ grow_vertical = 2
 mouse_filter = 1
 
 [node name="Planet" parent="." instance=ExtResource("1_wkh5q")]
+
+[node name="points_group" parent="." instance=ExtResource("4_a5ese")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309564, 9.87401, 0.318959)
+
+[node name="Player" parent="." instance=ExtResource("4_tplvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.106669, 19.6761, -0.655958)

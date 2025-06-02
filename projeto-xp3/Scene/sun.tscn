@@ -49,30 +49,30 @@ radius = 0.314415
 
 [node name="Sun" type="Node3D"]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="Sun" type="StaticBody3D" parent="."]
 
-[node name="OriginMesh" type="MeshInstance3D" parent="StaticBody3D"]
+[node name="OriginMesh" type="MeshInstance3D" parent="Sun"]
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
 mesh = SubResource("SphereMesh_oxfl1")
 skeleton = NodePath("../..")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="StaticBody3D/OriginMesh"]
+[node name="OmniLight3D" type="OmniLight3D" parent="Sun/OriginMesh"]
 light_energy = 10.0
-omni_range = 297.952
+omni_range = 916.723
 omni_attenuation = 0.2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sun"]
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
 shape = SubResource("SphereShape3D_8slsp")
 
-[node name="GravityWell" type="Area3D" parent="StaticBody3D"]
+[node name="GravityWell" type="Area3D" parent="Sun"]
 monitoring = false
 script = ExtResource("2_vx1ci")
 
-[node name="BoundingShape" type="CollisionShape3D" parent="StaticBody3D/GravityWell"]
+[node name="BoundingShape" type="CollisionShape3D" parent="Sun/GravityWell"]
 shape = SubResource("SphereShape3D_w0hgn")
 
-[node name="FallOffModel" type="Node" parent="StaticBody3D/GravityWell"]
+[node name="FallOffModel" type="Node" parent="Sun/GravityWell"]
 script = ExtResource("3_oxfl1")
-start_radius = 52.0
-max_acceleration = 100.0
+start_radius = 60.0
+max_acceleration = 20.0
