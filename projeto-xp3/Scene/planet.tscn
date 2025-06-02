@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://br2pl52tr77ft"]
+[gd_scene load_steps=7 format=3 uid="uid://3618ukohfjjs"]
 
 [ext_resource type="Script" uid="uid://t4fqg24t8o8m" path="res://Scripts/OrbitManager.gd" id="1_5xxnx"]
 [ext_resource type="PackedScene" uid="uid://ct6icwrtgufd8" path="res://Scene/PlanetMesh.tscn" id="1_fkihn"]
