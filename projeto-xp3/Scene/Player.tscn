@@ -37,6 +37,7 @@ margin = 0.2
 script = ExtResource("3_mud5u")
 
 [node name="Camera3D" type="Camera3D" parent="CameraAnchor/CameraArm"]
+current = true
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 target_position = Vector3(0, -5, 0)

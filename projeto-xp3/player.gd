@@ -1,10 +1,12 @@
 extends  CharacterBody3D
 
 @export var speed := 12.0
-@export var jump_strength := 30.0
+@export var jump_strength := 20.0
 
 @export var velocity_control_floor := 50.0
 @export var velocity_control_air := 5.0
+@export var rocket_rotation_speed := 2.5
+@export var rocket_velocity := 0.10
 
 @export var torque_control_floor := 10.0
 @export var torque_contrl_air := 1.0
@@ -16,6 +18,8 @@ var is_anchored = false
 var anchor_parent = null
 var anchor_distance = 30.0
 @onready var ground_ray = $RayCast3D
+
+var points = 0.0
 
 static func get_movement_input() -> Vector2:
 	var vector := Vector2(
@@ -37,12 +41,17 @@ static func project_movement_intention(basis: Basis, up: Vector3, movement_input
 	var right_surface = -up.cross(basis.y).normalized()
 	
 	return up_surface * movement_input.y + right_surface * movement_input.x
+
+func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("Restart"):
+		get_tree().reload_current_scene()
 	
+		
 func _physics_process(delta: float) -> void:
 	
 	_camera_anchor.target_origin = _balance_point.global_transform.origin
-
-	if (!is_anchored and ground_ray.is_colliding()):
+	
+	if (!is_anchored and ground_ray.is_colliding() ):
 		var collider = ground_ray.get_collider()
 		if collider is StaticBody3D:
 			anchor_to_planet(collider)
@@ -73,29 +82,47 @@ func _physics_process(delta: float) -> void:
 	var current_velocity_control: float
 	var current_torque_control: float
 	
-	if self.is_on_floor():
+	if is_on_floor():
 		current_velocity_control = velocity_control_floor
 		current_torque_control = torque_control_floor
 	else:
 		current_velocity_control = velocity_control_air
 		current_torque_control = torque_contrl_air
 		
-	self._process_jumping()
+	_process_jumping()
 	
 	_process_walking(movement_intention, current_torque_control * delta)
 	
 	velocity += acceleration * delta
 	
 	move_and_slide()
-	
-	_process_turning(movement_intention, current_torque_control * delta)
+	if !is_on_floor():
+		_rocket_mode(delta)
+	else:
+		_process_turning(movement_intention, current_torque_control * delta)
+
+func _rocket_mode(delta: float):
+	if not is_on_floor():
+		var eixo_x  = Input.get_action_strength("forward")   - Input.get_action_strength("back")
+		var eixo_z    = Input.get_action_strength("right")  - Input.get_action_strength("left")
+
+		var delta_rot := Vector2(eixo_x, eixo_z) * rocket_rotation_speed * delta
+
+		rotate_object_local(Vector3.RIGHT,  delta_rot.x)
+		rotate_object_local(Vector3.BACK,     delta_rot.y)
 	
 func _process_jumping():
 	var up := _balance_point.up
+	var thrust_direction = transform.basis.y
 	
-	var is_jumping := self.is_on_floor() and Input.is_action_just_pressed("jump")
+	var is_jumping := is_on_floor() and Input.is_action_just_pressed("jump")
+	var is_flying := !is_on_floor() and Input.is_action_pressed("jump")
+	
 	if is_jumping:
 		velocity += up * jump_strength - velocity.project(up)
+	elif is_flying:
+		velocity += thrust_direction * rocket_velocity
+		
 	
 func _process_walking(movement_intention: Vector3, control: float):
 	var up := _balance_point.up
@@ -135,3 +162,10 @@ func unanchor_to_planet():
 		self.reparent(get_tree().root)
 		is_anchored = false
 		anchor_parent = null
+
+func add_points():
+	points += 1
+	print(points)
+
+func get_points():
+	return points

@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://cjunouxtm3bl7"]
+[gd_scene load_steps=10 format=3 uid="uid://cjunouxtm3bl7"]
 
 [ext_resource type="Shader" uid="uid://dxjotdkhakm2r" path="res://Shader/Skybox.gdshader" id="1_2wwxx"]
+[ext_resource type="Script" uid="uid://dd1adutcd5a51" path="res://Scene/main.gd" id="1_3amdw"]
 [ext_resource type="PackedScene" uid="uid://bh0jdnuunto56" path="res://Scene/sun.tscn" id="2_2wwxx"]
 [ext_resource type="PackedScene" uid="uid://br2pl52tr77ft" path="res://Scene/Planet.tscn" id="2_sblpm"]
 [ext_resource type="PackedScene" uid="uid://bnlfhn34us0pv" path="res://Scene/Player.tscn" id="3_r34rm"]
@@ -24,11 +25,16 @@ sky_material = SubResource("ShaderMaterial_3amdw")
 background_mode = 2
 sky = SubResource("Sky_1xcnr")
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_1xcnr"]
+radius = 25.596
+
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.984688, 0, 0)
+script = ExtResource("1_3amdw")
 
-[node name="Player" parent="." instance=ExtResource("3_r34rm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120.888, -40.1183, 0)
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 400, 0)
+near = 0.045
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ow1sv")
@@ -37,11 +43,86 @@ environment = SubResource("Environment_ow1sv")
 
 [node name="Sun" parent="Origin" instance=ExtResource("2_2wwxx")]
 
+[node name="Area3D" type="Area3D" parent="Origin"]
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Origin/Area3D"]
+shape = SubResource("SphereShape3D_1xcnr")
+
 [node name="Planet" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("2_sblpm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 123.089, 0, 0.123596)
-G = 20.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 0, 0)
 center_node = NodePath("../Origin")
+color = Color(3.85046e-07, 0.601079, 0.938787, 1)
 
 [node name="Planet2" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("2_sblpm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191.091, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 306.832, 0, 0)
 center_node = NodePath("../Origin")
+color = Color(2.21401e-06, 0.699078, 0.292285, 1)
+
+[node name="Planet3" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("2_sblpm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 610.7, 0, 0)
+center_node = NodePath("../Origin")
+color = Color(0.926249, 0.81047, 0, 1)
+
+[node name="Planet4" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("2_sblpm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 435.731, 0, 0)
+G_area = 30.0
+center_node = NodePath("../Planet2")
+color = Color(0.662874, 0.173669, 1, 1)
+
+[node name="Player" parent="." instance=ExtResource("3_r34rm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 612.096, 46.6847, 0.0367737)
+jump_strength = 40.0
+
+[node name="Control" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = -34.0
+offset_right = 179.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.243137)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.5
+offset_top = -11.5
+offset_right = 31.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label2" type="Label" parent="Control/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Points: "
+
+[node name="Label" type="Label" parent="Control/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 50
+text = "Point"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="body_entered" from="Origin/Area3D" to="." method="_on_area_3d_body_entered"]

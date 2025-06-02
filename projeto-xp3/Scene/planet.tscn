@@ -1,15 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://br2pl52tr77ft"]
+[gd_scene load_steps=7 format=3 uid="uid://br2pl52tr77ft"]
 
 [ext_resource type="Script" uid="uid://t4fqg24t8o8m" path="res://Scripts/OrbitManager.gd" id="1_5xxnx"]
 [ext_resource type="PackedScene" uid="uid://ct6icwrtgufd8" path="res://Scene/PlanetMesh.tscn" id="1_fkihn"]
 [ext_resource type="Script" uid="uid://dgjitwksbtmwg" path="res://Scripts/PointGravity.gd" id="2_qx3gi"]
 [ext_resource type="Script" uid="uid://cmf1h6ydjamx7" path="res://Scripts/fall_off_model.gd" id="3_3hyrf"]
+[ext_resource type="PackedScene" uid="uid://b1gbjkk030tux" path="res://Scene/points_group.tscn" id="5_kum42"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_3hyrf"]
 radius = 0.314415
 
 [node name="Planet" type="Node3D"]
 script = ExtResource("1_5xxnx")
+G_area = 60.0
 center_mass = 100.0
 
 [node name="PlanetMesh" parent="." instance=ExtResource("1_fkihn")]
@@ -24,3 +26,6 @@ shape = SubResource("SphereShape3D_3hyrf")
 [node name="FallOffModel" type="Node" parent="PlanetMesh/GravityWell"]
 script = ExtResource("3_3hyrf")
 start_radius = 52.0
+
+[node name="points_group" parent="." instance=ExtResource("5_kum42")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0450306, 20.7301, -0.0544357)

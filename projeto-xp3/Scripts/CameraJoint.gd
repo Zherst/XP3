@@ -1,11 +1,11 @@
 extends SpringArm3D
 
 @export var mouuse_sensitivy := 0.05
-@export var pitch_range := Vector2( -80.0, -10.0)
+@export var pitch_range := Vector2( -80.0, 60.0)
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	rotation_degrees.x = pitch_range.x / 5 * 4 + pitch_range.y / 5 * 1
+	rotation_degrees.x = pitch_range.x / 5 * 3 + pitch_range.y / 5 * 1
 	
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
