@@ -2,7 +2,7 @@
 
 [ext_resource type="Shader" uid="uid://cb4myuinwii4d" path="res://Shader/BlackHole.gdshader" id="1_b1wyg"]
 [ext_resource type="Script" uid="uid://b1cdnecrbrweb" path="res://Scripts/points.gd" id="1_ybk32"]
-[ext_resource type="Texture2D" uid="uid://crx6ih0lkqou8" path="res://Noise/circle_05.png" id="2_v2gha"]
+[ext_resource type="Texture2D" uid="uid://crx6ih0lkqou8" path="res://Asset/circle_05.png" id="2_v2gha"]
 
 [sub_resource type="Curve" id="Curve_v2gha"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.753754, 0.984487), 0.0, 0.0, 0, 0, Vector2(1, 0.146778), 0.0, 0.0, 0, 0]

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crx6ih0lkqou8"
-path.s3tc="res://.godot/imported/circle_05.png-32073efb6cfee7ee6eefe644864553d8.s3tc.ctex"
+uid="uid://7jtr28yb3lg1"
+path.s3tc="res://.godot/imported/light_03.png-827e2f2463f6dec4e54bb78b0c3a8fce.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Noise/circle_05.png"
-dest_files=["res://.godot/imported/circle_05.png-32073efb6cfee7ee6eefe644864553d8.s3tc.ctex"]
+source_file="res://Asset/light_03.png"
+dest_files=["res://.godot/imported/light_03.png-827e2f2463f6dec4e54bb78b0c3a8fce.s3tc.ctex"]
 
 [params]
 
