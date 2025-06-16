@@ -8,7 +8,7 @@ extends Node3D
 @export var orbit_points: int = 128
 @export var color: Color = Color.WHITE
 
-@onready var fall_off = $PlanetMesh/GravityWell/FallOffModel
+@onready var fall_off = $GravityWell/FallOffModel
 var semi_major_axis: float
 var semi_minor_axis: float
 var angle: float = 0.0

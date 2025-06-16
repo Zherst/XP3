@@ -5,11 +5,18 @@ extends  CharacterBody3D
 
 @export var velocity_control_floor := 50.0
 @export var velocity_control_air := 5.0
-@export var rocket_rotation_speed := 2.5
-@export var rocket_velocity := 0.10
+
+@export var rocket_rotation_speed := 3
+@export var rocket_force := 5.0
+@export var thruster_points_per_second := 1.0
+
+var thruster_time_left := 0.0
+var is_using_thruster := false
+var rocket_mode := false
+@onready var thruster_part = $Thruster/Fire
 
 @export var torque_control_floor := 10.0
-@export var torque_contrl_air := 1.0
+@export var torque_contrl_air := 0.0
 
 @onready var _balance_point: BalancePoint = $BalancePoint
 @onready var _camera_anchor: CameraAnchor = $CameraAnchor
@@ -19,7 +26,14 @@ var anchor_parent = null
 var anchor_distance = 30.0
 @onready var ground_ray = $RayCast3D
 
-var points = 0.0
+@export var points = 10.0
+@onready var fuel_bar = $Control/HBoxContainer/VBoxContainer/fuel_bar
+
+@onready var animation = $AnimationPlayer
+@onready var bar = $Control
+
+func _ready() -> void:
+	fuel_bar.init_fuel(points)
 
 static func get_movement_input() -> Vector2:
 	var vector := Vector2(
@@ -45,6 +59,8 @@ static func project_movement_intention(basis: Basis, up: Vector3, movement_input
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("Restart"):
 		get_tree().reload_current_scene()
+	if Input.is_action_just_pressed("ui_cancel"):
+		get_tree().quit()
 	
 		
 func _physics_process(delta: float) -> void:
@@ -54,12 +70,14 @@ func _physics_process(delta: float) -> void:
 	if (!is_anchored and ground_ray.is_colliding() ):
 		var collider = ground_ray.get_collider()
 		if collider is StaticBody3D:
+			rocket_mode = false
 			anchor_to_planet(collider)
 			print(collider)
 	
 	if is_anchored and anchor_parent:
 		var dist = global_transform.origin.distance_to(anchor_parent.global_transform.origin) 
 		if dist > anchor_distance:
+			rocket_mode = true
 			unanchor_to_planet()
 			print('saiu')
 	
@@ -89,41 +107,74 @@ func _physics_process(delta: float) -> void:
 		current_velocity_control = velocity_control_air
 		current_torque_control = torque_contrl_air
 		
-	_process_jumping()
+	_process_jumping(delta)
 	
 	_process_walking(movement_intention, current_torque_control * delta)
 	
 	velocity += acceleration * delta
 	
 	move_and_slide()
-	if !is_on_floor():
-		_rocket_mode(delta)
-	else:
+	
+	
+	if is_on_floor():
 		_process_turning(movement_intention, current_torque_control * delta)
-
-func _rocket_mode(delta: float):
-	if not is_on_floor():
-		var eixo_x  = Input.get_action_strength("forward")   - Input.get_action_strength("back")
-		var eixo_z    = Input.get_action_strength("right")  - Input.get_action_strength("left")
-
-		var delta_rot := Vector2(eixo_x, eixo_z) * rocket_rotation_speed * delta
-
-		rotate_object_local(Vector3.RIGHT,  delta_rot.x)
-		rotate_object_local(Vector3.BACK,     delta_rot.y)
+	else:
+		if rocket_mode:
+			_process_rocket_rotation(delta)
 	
-func _process_jumping():
+	animated_movement(get_movement_input())
+
+func animated_movement(movement_input: Vector2):
+	if movement_input != Vector2.ZERO and is_on_floor():
+		animation.play("CorrendoT")
+	else:
+		animation.play("Parado")
+	
+func _process_rocket_rotation(delta: float):
+	# ROTACIONAR como foguete
+	var pitch = Input.get_action_strength("back") - Input.get_action_strength("forward")
+	var roll = Input.get_action_strength("right") - Input.get_action_strength("left")
+
+	var delta_rot := Vector3(pitch, 0, roll) * rocket_rotation_speed * delta
+
+	rotate_object_local(Vector3.RIGHT, delta_rot.x)
+	rotate_object_local(Vector3.BACK, delta_rot.z)
+
+func start_thruster():
+	if points > 0:
+		is_using_thruster = true
+		thruster_time_left = points / thruster_points_per_second
+	else:
+		is_using_thruster = false	
+		thruster_part.set_emitting(false)
+	
+
+func _process_jumping(delta: float):
+	
 	var up := _balance_point.up
-	var thrust_direction = transform.basis.y
+	var thrust := transform.basis.y * rocket_force * delta
 	
-	var is_jumping := is_on_floor() and Input.is_action_just_pressed("jump")
-	var is_flying := !is_on_floor() and Input.is_action_pressed("jump")
-	
-	if is_jumping:
-		velocity += up * jump_strength - velocity.project(up)
-	elif is_flying:
-		velocity += thrust_direction * rocket_velocity
+	if Input.is_action_pressed("jump"):
+		if is_on_floor():
+			velocity += up * jump_strength - velocity.project(up)
 		
-	
+		elif !is_on_floor() and !is_using_thruster:	
+			start_thruster()
+			
+		if is_using_thruster:
+			thruster_part.set_emitting(true)
+			if thruster_time_left > 0.0 and points > 0:
+				thruster_time_left -= delta
+				points -= thruster_points_per_second * delta
+				points = max(points,0)
+				fuel_bar.fuel = points
+				print(points)
+				velocity += thrust
+				
+			else:
+				is_using_thruster = false
+	else:
+		thruster_part.set_emitting(false)
 func _process_walking(movement_intention: Vector3, control: float):
 	var up := _balance_point.up
 	
@@ -165,7 +216,11 @@ func unanchor_to_planet():
 
 func add_points():
 	points += 1
+	fuel_bar.fuel = points
 	print(points)
 
 func get_points():
 	return points
+
+func hide_bar():
+	bar.set_visible(false)

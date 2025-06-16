@@ -1,53 +1,43 @@
-[gd_scene load_steps=9 format=3 uid="uid://cpsotp3y1s0rl"]
+[gd_scene load_steps=8 format=3 uid="uid://cpsotp3y1s0rl"]
 
 [ext_resource type="Shader" uid="uid://dn21ghu5dyd62" path="res://Shader/Water.gdshader" id="1_4bn1e"]
 
-[sub_resource type="Gradient" id="Gradient_4bn1e"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4bn1e"]
+frequency = 0.09
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kjt8b"]
+seamless = true
+as_normal_map = true
+bump_strength = 1.1
+noise = SubResource("FastNoiseLite_4bn1e")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_kjt8b"]
-noise_type = 3
-frequency = 0.4346
-fractal_octaves = 1
+frequency = 0.08
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rc85t"]
-color_ramp = SubResource("Gradient_4bn1e")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5ymry"]
+seamless = true
+as_normal_map = true
+bump_strength = 2.1
 noise = SubResource("FastNoiseLite_kjt8b")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_rc85t"]
-noise_type = 3
-frequency = 0.1483
-fractal_octaves = 1
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_217pu"]
-noise = SubResource("FastNoiseLite_rc85t")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ymry"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rc85t"]
 render_priority = 0
 shader = ExtResource("1_4bn1e")
-shader_parameter/time_speed = 0.01
-shader_parameter/surface_speed = 2.0
-shader_parameter/spin = 0.0
-shader_parameter/brightness = 1.0
-shader_parameter/color_intensity = 1.0
-shader_parameter/horizontal_frequency = 1.0
-shader_parameter/vertical_frequency = 2.0
-shader_parameter/size = 3.0
-shader_parameter/banding_bias = 0.6
-shader_parameter/wave_texture = SubResource("NoiseTexture2D_217pu")
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_rc85t")
-shader_parameter/wave_height = 0.5
-shader_parameter/texture_height = 0.5
-shader_parameter/color1 = Color(0.59, 0.761, 1, 1)
-shader_parameter/color2 = Color(0.274, 0.474, 0.98, 1)
-shader_parameter/color3 = Color(0.059, 0.389, 0.85, 1)
-shader_parameter/color4 = Color(0, 0.267, 1, 1)
+shader_parameter/uAlbedo = Color(0.210694, 0.580849, 0.716117, 1)
+shader_parameter/uTexureNormal = SubResource("NoiseTexture2D_kjt8b")
+shader_parameter/uTexureNormal2 = SubResource("NoiseTexture2D_5ymry")
+shader_parameter/uNormalMix = 0.2
+shader_parameter/uWaveDirection = Vector2(1, 0)
+shader_parameter/uWaveDirection2 = Vector2(0, 1)
+shader_parameter/uTimeScale = 0.019
+shader_parameter/uWaveScale = 1.0
 
-[sub_resource type="SphereMesh" id="SphereMesh_rc85t"]
-material = SubResource("ShaderMaterial_5ymry")
-radius = 10.0
-height = 20.0
+[sub_resource type="SphereMesh" id="SphereMesh_ujump"]
+material = SubResource("ShaderMaterial_rc85t")
 
-[node name="Node3D" type="Node3D"]
+[node name="Water" type="Node3D"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("SphereMesh_rc85t")
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("SphereMesh_ujump")

@@ -1,9 +1,35 @@
-[gd_scene load_steps=11 format=3 uid="uid://djgvaculm4stc"]
+[gd_scene load_steps=20 format=3 uid="uid://djgvaculm4stc"]
 
-[ext_resource type="PackedScene" uid="uid://br2pl52tr77ft" path="res://Scene/Planet.tscn" id="1_wkh5q"]
+[ext_resource type="PackedScene" uid="uid://br2pl52tr77ft" path="res://Scene/planets/Planet.tscn" id="1_wkh5q"]
+[ext_resource type="FontFile" uid="uid://chkgjg0g2pund" path="res://Asset/Starborn.ttf" id="3_56guk"]
+[ext_resource type="PackedScene" uid="uid://ddw0j32ydt4ps" path="res://Scene/planets/Planet2.tscn" id="3_tplvc"]
 [ext_resource type="Shader" uid="uid://dk6xm66bkg05b" path="res://Shader/SunFlare.gdshader" id="3_vo06n"]
-[ext_resource type="PackedScene" uid="uid://b1gbjkk030tux" path="res://Scene/points_group.tscn" id="4_a5ese"]
-[ext_resource type="PackedScene" uid="uid://bnlfhn34us0pv" path="res://Scene/Player.tscn" id="4_tplvc"]
+[ext_resource type="PackedScene" uid="uid://bh0jdnuunto56" path="res://Scene/sun.tscn" id="4_o1dkv"]
+[ext_resource type="PackedScene" uid="uid://dwgid67js3yb5" path="res://Scene/planets/Planet4.tscn" id="5_dqp5o"]
+[ext_resource type="Shader" uid="uid://dxjotdkhakm2r" path="res://Shader/Skybox.gdshader" id="6_smwo6"]
+[ext_resource type="PackedScene" uid="uid://bbqs1r57v70y0" path="res://Scene/planetMesh/PlanetMesh3.tscn" id="7_smwo6"]
+[ext_resource type="PackedScene" path="res://Asset/Per/personagem_a.tscn" id="8_56guk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_56guk"]
+shader = ExtResource("6_smwo6")
+shader_parameter/sky_color = Color(0.03, 0.05, 0.11, 1)
+shader_parameter/star_base_color = Color(0.999999, 0.799595, 0.309594, 1)
+shader_parameter/star_hue_offset = 1.0
+shader_parameter/star_intensity = 0.08
+shader_parameter/star_twinkle_speed = 0.8
+shader_parameter/star_twinkle_intensity = 0.2
+shader_parameter/layer_scale = 20.0
+shader_parameter/layer_scale_step = 10.0
+shader_parameter/layers_count = 5
+
+[sub_resource type="Sky" id="Sky_1xcnr"]
+sky_material = SubResource("ShaderMaterial_56guk")
+
+[sub_resource type="Environment" id="Environment_3fnjx"]
+background_mode = 2
+sky = SubResource("Sky_1xcnr")
+ambient_light_source = 1
+glow_enabled = true
 
 [sub_resource type="Gradient" id="Gradient_a5ese"]
 offsets = PackedFloat32Array(0, 0.238245, 0.394984, 0.605016, 0.658307, 0.780564)
@@ -34,7 +60,17 @@ shader_parameter/FlareSpacing = 0.6
 shader_parameter/Intensity = 8.0
 shader_parameter/Saturation_ = 0.5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3fnjx"]
+bg_color = Color(0.294118, 0.603922, 0.984314, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
 [node name="Teste" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3fnjx")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.6716, 18.9727, 0)
@@ -60,10 +96,57 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 
+[node name="Title" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -877.5
+offset_top = 300.0
+offset_right = 877.5
+offset_bottom = 501.0
+grow_horizontal = 2
+size_flags_horizontal = 0
+size_flags_vertical = 10
+theme_override_fonts/font = ExtResource("3_56guk")
+theme_override_font_sizes/font_size = 180
+theme_override_styles/normal = SubResource("StyleBoxFlat_3fnjx")
+text = "Space Jumper"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sun" parent="." instance=ExtResource("4_o1dkv")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+
 [node name="Planet" parent="." instance=ExtResource("1_wkh5q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 5.5929, -156.396)
+G = 100.0
+center_mass = 1000.0
+color = Color(2.31028e-06, 0.631266, 0.572381, 1)
 
-[node name="points_group" parent="." instance=ExtResource("4_a5ese")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.309564, 9.87401, 0.318959)
+[node name="Planet2" parent="." instance=ExtResource("3_tplvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, 0, 0)
+G = 200.0
+center_mass = 5000.0
+color = Color(1, 0.415673, 0.950389, 1)
 
-[node name="Player" parent="." instance=ExtResource("4_tplvc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.106669, 19.6761, -0.655958)
+[node name="Planet3" parent="." instance=ExtResource("5_dqp5o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 181.719, 22.1867, 132.221)
+G = 90.0
+center_mass = 1000.0
+color = Color(0.747497, 0.64429, 0, 1)
+
+[node name="PlanetMesh" parent="." instance=ExtResource("7_smwo6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -107.596, 56.5591, 213.417)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.00830767, 0, 0.999965, 0, 1, 0, -0.999965, 0, 0.00830767, 311.85, 29.2842, 1.24391)
+fov = 75.5
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Camera3D"]
+light_energy = 5.015
+omni_range = 17.1923
+omni_attenuation = 0.015
+
+[node name="PersonagemA" parent="." instance=ExtResource("8_56guk")]
+transform = Transform3D(-0.19916, 0, -1.99006, 0, 2, 0, 1.99006, 0, -0.19916, 302.016, 25.2567, 0.767798)

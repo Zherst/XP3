@@ -1,0 +1,241 @@
+[gd_scene load_steps=16 format=3 uid="uid://duragoi831phu"]
+
+[ext_resource type="Shader" uid="uid://dxjotdkhakm2r" path="res://Shader/Skybox.gdshader" id="1_alu6o"]
+[ext_resource type="PackedScene" path="res://Asset/Per/personagem_a.tscn" id="1_ddci3"]
+[ext_resource type="PackedScene" uid="uid://bh0jdnuunto56" path="res://Scene/sun.tscn" id="2_ffxp3"]
+[ext_resource type="PackedScene" uid="uid://ddw0j32ydt4ps" path="res://Scene/planets/Planet2.tscn" id="3_6hgn1"]
+[ext_resource type="PackedScene" uid="uid://hgjd5610kubf" path="res://Scene/planets/Planet3.tscn" id="4_fyf5i"]
+[ext_resource type="PackedScene" uid="uid://dwgid67js3yb5" path="res://Scene/planets/Planet4.tscn" id="5_ffxp3"]
+[ext_resource type="FontFile" uid="uid://chkgjg0g2pund" path="res://Asset/Starborn.ttf" id="6_6hgn1"]
+[ext_resource type="Script" uid="uid://di0ovhyt4llkw" path="res://Scripts/Menu.gd" id="6_fyf5i"]
+[ext_resource type="PackedScene" uid="uid://sjyifmf44crc" path="res://Scene/Fade.tscn" id="8_ddci3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k52wo"]
+shader = ExtResource("1_alu6o")
+shader_parameter/sky_color = Color(0.03, 0.05, 0.11, 1)
+shader_parameter/star_base_color = Color(0.999999, 0.799595, 0.309594, 1)
+shader_parameter/star_hue_offset = 1.0
+shader_parameter/star_intensity = 0.08
+shader_parameter/star_twinkle_speed = 0.8
+shader_parameter/star_twinkle_intensity = 0.2
+shader_parameter/layer_scale = 20.0
+shader_parameter/layer_scale_step = 10.0
+shader_parameter/layers_count = 5
+
+[sub_resource type="Sky" id="Sky_ddci3"]
+sky_material = SubResource("ShaderMaterial_k52wo")
+
+[sub_resource type="Environment" id="Environment_ddci3"]
+background_mode = 2
+sky = SubResource("Sky_ddci3")
+ambient_light_source = 1
+glow_enabled = true
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_iaqyx"]
+radius = 25.596
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fyf5i"]
+bg_color = Color(0.294118, 0.603922, 0.984314, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ffxp3"]
+bg_color = Color(0.294118, 0.603922, 0.984314, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="Menu" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 645.374, -1.07256e-05)
+current = true
+near = 0.045
+
+[node name="PersonagemA" parent="Camera3D" instance=ExtResource("1_ddci3")]
+transform = Transform3D(-0.78043, 0.625243, 0, -0.625243, -0.78043, 0, 0, 0, 1, 2.17324, -0.471317, -5.92798)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Camera3D"]
+light_energy = 10.425
+omni_range = 12.6088
+omni_attenuation = -0.195
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ddci3")
+
+[node name="Origin" type="Node3D" parent="."]
+
+[node name="Sun" parent="Origin" instance=ExtResource("2_ffxp3")]
+
+[node name="Area3D" type="Area3D" parent="Origin"]
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Origin/Area3D"]
+shape = SubResource("SphereShape3D_iaqyx")
+
+[node name="Planet" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("3_6hgn1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, 0, 0)
+G = 150.0
+center_node = NodePath("../Origin")
+center_mass = 10000.0
+color = Color(7.5084e-06, 0.67024, 0.911929, 1)
+
+[node name="Planet2" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("4_fyf5i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 0)
+G = 100.0
+center_node = NodePath("../Origin")
+center_mass = 1000.0
+color = Color(1, 0.283554, 0.479331, 1)
+
+[node name="Planet3" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("5_ffxp3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 450, 0, 0)
+G = 90.0
+center_node = NodePath("../Origin")
+center_mass = 1000.0
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_fyf5i")
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.254902)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 300
+alignment = 1
+
+[node name="Title" type="Label" parent="Control/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 10
+theme_override_fonts/font = ExtResource("6_6hgn1")
+theme_override_font_sizes/font_size = 180
+theme_override_styles/normal = SubResource("StyleBoxFlat_fyf5i")
+text = "Space Jumper"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Play" type="Button" parent="Control/HBoxContainer/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("6_6hgn1")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_ffxp3")
+text = "Start Game"
+icon_alignment = 2
+
+[node name="Crédits" type="Button" parent="Control/HBoxContainer/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_fonts/font = ExtResource("6_6hgn1")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_ffxp3")
+text = "Credits"
+
+[node name="Quit" type="Button" parent="Control/HBoxContainer/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_fonts/font = ExtResource("6_6hgn1")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_ffxp3")
+text = "Quit
+"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -276.5
+offset_right = 276.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="Title" type="Label" parent="Control/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+theme_override_fonts/font = ExtResource("6_6hgn1")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_fyf5i")
+text = "Programador - Renato Guan"
+horizontal_alignment = 1
+
+[node name="Title2" type="Label" parent="Control/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 2
+theme_override_fonts/font = ExtResource("6_6hgn1")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_fyf5i")
+text = "Artista e sonoplasta - bruno Otavio Pereira"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/HBoxContainer2/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 10)
+layout_mode = 2
+
+[node name="Menu" type="Button" parent="Control/HBoxContainer2/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_fonts/font = ExtResource("6_6hgn1")
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_ffxp3")
+text = "Menu
+"
+
+[node name="Control" parent="Control" instance=ExtResource("8_ddci3")]
+visible = false
+layout_mode = 1
+
+[connection signal="pressed" from="Control/HBoxContainer/VBoxContainer/VBoxContainer2/Play" to="Control" method="_on_play_pressed"]
+[connection signal="pressed" from="Control/HBoxContainer/VBoxContainer/VBoxContainer2/Crédits" to="Control" method="_on_crédits_pressed"]
+[connection signal="pressed" from="Control/HBoxContainer/VBoxContainer/VBoxContainer2/Quit" to="Control" method="_on_quit_pressed"]
+[connection signal="pressed" from="Control/HBoxContainer2/VBoxContainer/HBoxContainer/VBoxContainer2/Menu" to="Control" method="_on_menu_pressed"]

@@ -1,0 +1,119 @@
+[gd_scene load_steps=24 format=3 uid="uid://br2pl52tr77ft"]
+
+[ext_resource type="Script" uid="uid://t4fqg24t8o8m" path="res://Scripts/OrbitManager.gd" id="1_5xxnx"]
+[ext_resource type="PackedScene" uid="uid://ct6icwrtgufd8" path="res://Scene/planetMesh/PlanetMesh.tscn" id="1_fkihn"]
+[ext_resource type="Script" uid="uid://dgjitwksbtmwg" path="res://Scripts/PointGravity.gd" id="2_qx3gi"]
+[ext_resource type="Script" uid="uid://cmf1h6ydjamx7" path="res://Scripts/fall_off_model.gd" id="3_3hyrf"]
+[ext_resource type="Script" uid="uid://ci06jnl0hebab" path="res://Scripts/PlanetNoise.gd" id="3_8jphd"]
+[ext_resource type="Script" uid="uid://bq6ur7wbx31kx" path="res://Scripts/PlanetData.gd" id="3_ldka3"]
+[ext_resource type="PackedScene" uid="uid://b1gbjkk030tux" path="res://Scene/points_group.tscn" id="5_kum42"]
+[ext_resource type="Shader" uid="uid://dn21ghu5dyd62" path="res://Shader/Water.gdshader" id="8_8jphd"]
+[ext_resource type="PackedScene" uid="uid://s5aol31fgvnt" path="res://Scene/points.tscn" id="9_mleqy"]
+
+[sub_resource type="Gradient" id="Gradient_8jphd"]
+offsets = PackedFloat32Array(0.205634, 0.366197, 0.56338, 1)
+colors = PackedColorArray(0.612839, 0.481479, 0.156333, 1, 0.251215, 0.392535, 0.0781878, 1, 0.335586, 0.406255, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mleqy"]
+gradient = SubResource("Gradient_8jphd")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_mleqy"]
+frequency = 0.0001
+
+[sub_resource type="Resource" id="Resource_m2ef5"]
+script = ExtResource("3_8jphd")
+amplitude = 1.0
+min_height = 0.0
+noise_map = SubResource("FastNoiseLite_mleqy")
+is_base_layer = true
+metadata/_custom_type_script = "uid://ci06jnl0hebab"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_h3iit"]
+noise_type = 2
+
+[sub_resource type="Resource" id="Resource_ia40c"]
+script = ExtResource("3_8jphd")
+amplitude = 1.0
+min_height = 0.0
+noise_map = SubResource("FastNoiseLite_h3iit")
+is_base_layer = false
+metadata/_custom_type_script = "uid://ci06jnl0hebab"
+
+[sub_resource type="Resource" id="Resource_kn6eh"]
+script = ExtResource("3_ldka3")
+radius = 10
+resolution = 100.0
+planet_noise = [SubResource("Resource_m2ef5"), SubResource("Resource_ia40c")]
+planet_color = SubResource("GradientTexture1D_mleqy")
+metadata/_custom_type_script = "uid://bq6ur7wbx31kx"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3hyrf"]
+radius = 0.314415
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4bn1e"]
+frequency = 0.09
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mleqy"]
+seamless = true
+as_normal_map = true
+bump_strength = 1.1
+noise = SubResource("FastNoiseLite_4bn1e")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rc85t"]
+frequency = 0.08
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_m2ef5"]
+seamless = true
+as_normal_map = true
+bump_strength = 2.1
+noise = SubResource("FastNoiseLite_rc85t")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_217pu"]
+render_priority = 0
+shader = ExtResource("8_8jphd")
+shader_parameter/uAlbedo = Color(0.210694, 0.580849, 0.716117, 1)
+shader_parameter/uTexureNormal = SubResource("NoiseTexture2D_mleqy")
+shader_parameter/uTexureNormal2 = SubResource("NoiseTexture2D_m2ef5")
+shader_parameter/uNormalMix = 0.2
+shader_parameter/uWaveDirection = Vector2(1, 0)
+shader_parameter/uWaveDirection2 = Vector2(0, 1)
+shader_parameter/uTimeScale = 0.019
+shader_parameter/uWaveScale = 1.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_h3iit"]
+material = SubResource("ShaderMaterial_217pu")
+
+[node name="Planet" type="Node3D"]
+script = ExtResource("1_5xxnx")
+G_area = 60.0
+center_mass = 100.0
+
+[node name="PlanetMesh" parent="." instance=ExtResource("1_fkihn")]
+planet_data = SubResource("Resource_kn6eh")
+
+[node name="points_group" parent="." instance=ExtResource("5_kum42")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0450306, 20.7301, -0.0544357)
+
+[node name="GravityWell" type="Area3D" parent="."]
+monitoring = false
+script = ExtResource("2_qx3gi")
+
+[node name="BoundingShape" type="CollisionShape3D" parent="GravityWell"]
+shape = SubResource("SphereShape3D_3hyrf")
+
+[node name="FallOffModel" type="Node" parent="GravityWell"]
+script = ExtResource("3_3hyrf")
+start_radius = 52.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(39, 0, 0, 0, 39, 0, 0, 0, 39, 0, 0, 0)
+mesh = SubResource("SphereMesh_h3iit")
+
+[node name="points" parent="." instance=ExtResource("9_mleqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.53213, 12.6056, -14.0678)
+
+[node name="points2" parent="." instance=ExtResource("9_mleqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.55423, 16.2874, 10.5098)
+
+[node name="points3" parent="." instance=ExtResource("9_mleqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.6366, 3.90672, 15.0843)

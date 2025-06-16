@@ -1,8 +1,12 @@
-[gd_scene load_steps=14 format=3 uid="uid://bh0jdnuunto56"]
+[gd_scene load_steps=34 format=3 uid="uid://bh0jdnuunto56"]
 
+[ext_resource type="Script" uid="uid://cdwvgaik8r88w" path="res://Scene/sun.gd" id="1_8slsp"]
 [ext_resource type="Shader" uid="uid://ovp6cccu7vjy" path="res://Shader/Sun.gdshader" id="1_herta"]
 [ext_resource type="Script" uid="uid://dgjitwksbtmwg" path="res://Scripts/PointGravity.gd" id="2_vx1ci"]
 [ext_resource type="Script" uid="uid://cmf1h6ydjamx7" path="res://Scripts/fall_off_model.gd" id="3_oxfl1"]
+[ext_resource type="Texture2D" uid="uid://c08al4pqp665v" path="res://addons/kenney_particle_pack/magic_05.png" id="4_oxfl1"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_8slsp"]
 
 [sub_resource type="Gradient" id="Gradient_r34rm"]
 
@@ -29,34 +33,126 @@ noise = SubResource("FastNoiseLite_ow1sv")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c2iwn"]
 render_priority = 0
 shader = ExtResource("1_herta")
-shader_parameter/Glow_Power = 4.286
+shader_parameter/Glow_Power = 4.3
 shader_parameter/Lightness_Difference = 10.0
-shader_parameter/Sun_Color = Color(0.501961, 0.270588, 0.0352941, 1)
+shader_parameter/Sun_Color = Color(0.353307, 0.110382, 0.0455012, 1)
 shader_parameter/voronoi_noise = SubResource("NoiseTexture2D_vx1ci")
 shader_parameter/emission_noise = SubResource("NoiseTexture2D_fdm6b")
-shader_parameter/waveSpeed = 0.439
-shader_parameter/fresnel = 1.199
-shader_parameter/scale = 0.931
+shader_parameter/waveSpeed = 0.5
+shader_parameter/fresnel = 1.2
+shader_parameter/scale = 0.9
 shader_parameter/blendSharpness = 0.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_oxfl1"]
+lightmap_size_hint = Vector2i(17, 9)
 material = SubResource("ShaderMaterial_c2iwn")
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_8slsp"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8slsp"]
+frequency = 0.0395
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_w0hgn"]
+in_3d_space = true
+noise = SubResource("FastNoiseLite_8slsp")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dthjk"]
+frequency = 0.0148
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_n7fds"]
+in_3d_space = true
+noise = SubResource("FastNoiseLite_dthjk")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qa4vi"]
+render_priority = 0
+shader = ExtResource("1_herta")
+shader_parameter/Glow_Power = 2.3
+shader_parameter/Lightness_Difference = 10.0
+shader_parameter/Sun_Color = Color(0.0024062, 0.297589, 0.568144, 1)
+shader_parameter/voronoi_noise = SubResource("NoiseTexture2D_n7fds")
+shader_parameter/emission_noise = SubResource("NoiseTexture2D_w0hgn")
+shader_parameter/waveSpeed = 0.5
+shader_parameter/fresnel = 1.2
+shader_parameter/scale = 0.9
+shader_parameter/blendSharpness = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_wl61h"]
+material = SubResource("ShaderMaterial_qa4vi")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8slsp"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("4_oxfl1")
+billboard_keep_scale = true
+
+[sub_resource type="Curve" id="Curve_w0hgn"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.975976, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_dthjk"]
+_limits = [0.0, 5.0, 0.0, 1.0]
+_data = [Vector2(0, 5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_n7fds"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_qa4vi"]
+curve_x = SubResource("Curve_w0hgn")
+curve_y = SubResource("Curve_dthjk")
+curve_z = SubResource("Curve_n7fds")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wl61h"]
+particle_flag_align_y = true
+emission_shape = 1
+emission_sphere_radius = 0.2
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 0, 0)
+scale_min = 10.0
+scale_max = 25.0
+scale_curve = SubResource("CurveXYZTexture_qa4vi")
+color = Color(5, 2, 1, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_55ymp"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_w0hgn"]
 radius = 0.314415
 
+[sub_resource type="Curve" id="Curve_oxfl1"]
+_limits = [0.0, 1000.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0780781, 1000), 0.0, 0.0, 0, 0, Vector2(0.960961, 224.344), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_8slsp"]
+curve = SubResource("Curve_oxfl1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_oxfl1"]
+direction = Vector3(0, 0, 0)
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_8slsp")
+color = Color(5, 2, 1, 1)
+collision_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w0hgn"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_dthjk"]
+material = SubResource("StandardMaterial3D_w0hgn")
+
 [node name="Sun" type="Node3D"]
+script = ExtResource("1_8slsp")
 
 [node name="Sun" type="StaticBody3D" parent="."]
 
-[node name="OriginMesh" type="MeshInstance3D" parent="Sun"]
-transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
-mesh = SubResource("SphereMesh_oxfl1")
-skeleton = NodePath("../..")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="Sun/OriginMesh"]
+[node name="OmniLight3D" type="OmniLight3D" parent="Sun"]
 light_energy = 10.0
 omni_range = 916.723
 omni_attenuation = 0.2
@@ -65,14 +161,52 @@ omni_attenuation = 0.2
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
 shape = SubResource("SphereShape3D_8slsp")
 
-[node name="GravityWell" type="Area3D" parent="Sun"]
+[node name="Red_Sun" type="MeshInstance3D" parent="Sun"]
+transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
+mesh = SubResource("SphereMesh_oxfl1")
+skeleton = NodePath("../..")
+
+[node name="Blue_Sun" type="MeshInstance3D" parent="Sun"]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+mesh = SubResource("SphereMesh_wl61h")
+
+[node name="Sparks" type="GPUParticles3D" parent="Sun"]
+material_override = SubResource("StandardMaterial3D_8slsp")
+amount = 15
+lifetime = 0.6
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_wl61h")
+draw_pass_1 = SubResource("QuadMesh_55ymp")
+
+[node name="Sparks2" type="GPUParticles3D" parent="Sun"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_8slsp")
+amount = 15
+lifetime = 0.6
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_wl61h")
+draw_pass_1 = SubResource("QuadMesh_55ymp")
+
+[node name="GravityWell" type="Area3D" parent="."]
 monitoring = false
 script = ExtResource("2_vx1ci")
 
-[node name="BoundingShape" type="CollisionShape3D" parent="Sun/GravityWell"]
+[node name="BoundingShape" type="CollisionShape3D" parent="GravityWell"]
 shape = SubResource("SphereShape3D_w0hgn")
 
-[node name="FallOffModel" type="Node" parent="Sun/GravityWell"]
+[node name="FallOffModel" type="Node" parent="GravityWell"]
 script = ExtResource("3_oxfl1")
 start_radius = 60.0
 max_acceleration = 20.0
+
+[node name="Explosion" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 1
+lifetime = 5.0
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_oxfl1")
+draw_pass_1 = SubResource("SphereMesh_dthjk")

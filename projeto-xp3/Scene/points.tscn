@@ -13,7 +13,7 @@ curve = SubResource("Curve_v2gha")
 
 [sub_resource type="Gradient" id="Gradient_ecvuw"]
 offsets = PackedFloat32Array(0.276873, 0.820847)
-colors = PackedColorArray(0, 0, 1, 1, 0.880577, 0.00633362, 1, 1)
+colors = PackedColorArray(0.792012, 0.711769, 0, 1, 0.182684, 0.800986, 0.95429, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_b1wyg"]
 gradient = SubResource("Gradient_ecvuw")
@@ -82,6 +82,7 @@ material = SubResource("ShaderMaterial_ybk32")
 flip_faces = true
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_v2gha"]
+radius = 0.843237
 
 [node name="points" type="Node3D"]
 script = ExtResource("1_ybk32")
@@ -89,6 +90,7 @@ script = ExtResource("1_ybk32")
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
 transform = Transform3D(1.00217, 0, 0, 0, 1.00217, 0, 0, 0, 1.00217, 0, 0, 0)
 amount = 20
+local_coords = true
 process_material = SubResource("ParticleProcessMaterial_dlf7t")
 draw_pass_1 = SubResource("QuadMesh_rq3hm")
 

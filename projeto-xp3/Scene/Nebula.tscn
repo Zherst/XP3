@@ -1,0 +1,36 @@
+[gd_scene load_steps=4 format=3 uid="uid://b0mlaf1l8336r"]
+
+[ext_resource type="Shader" uid="uid://muf7xk704ss1" path="res://Shader/Nebula.gdshader" id="1_cbkms"]
+
+[sub_resource type="CurveTexture" id="CurveTexture_ejubk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fn5uf"]
+render_priority = 0
+shader = ExtResource("1_cbkms")
+shader_parameter/_totalBrightness = 0.0
+shader_parameter/_maxSteps = 0
+shader_parameter/_stepSize = 0.0
+shader_parameter/_rdRotation = Vector3(0, 0, 0)
+shader_parameter/_lightDir = Vector3(0, 0, 0)
+shader_parameter/_maxLightDistance = 0.0
+shader_parameter/_transmissionThreshhold = 0.0
+shader_parameter/_lightStepSize = 0.0
+shader_parameter/_lightDensityScale = 0.0
+shader_parameter/_maxLightSteps = 0
+shader_parameter/_volumeOffset = Vector3(0, 0, 0)
+shader_parameter/_volumeRotation = Vector3(0, 0, 0)
+shader_parameter/_volumeScale = Vector3(0, 0, 0)
+shader_parameter/_densityScale = 0.0
+shader_parameter/_darknessThreshhold = 0.0
+shader_parameter/_transmittance = 0.0
+shader_parameter/_lightAbsorb = 0.0
+shader_parameter/_epsilon = 0.0
+shader_parameter/_gradientTex = SubResource("CurveTexture_ejubk")
+shader_parameter/_gradientTex_ST = Vector4(0, 0, 0, 0)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -1.75781, 0, 0)
+size = Vector3(1.35156, 1, 1)
+material = SubResource("ShaderMaterial_fn5uf")

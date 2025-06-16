@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://cjunouxtm3bl7"]
+[gd_scene load_steps=13 format=3 uid="uid://cjunouxtm3bl7"]
 
 [ext_resource type="Shader" uid="uid://dxjotdkhakm2r" path="res://Shader/Skybox.gdshader" id="1_2wwxx"]
-[ext_resource type="Script" uid="uid://dd1adutcd5a51" path="res://Scene/main.gd" id="1_3amdw"]
+[ext_resource type="Script" uid="uid://dd1adutcd5a51" path="res://Scripts/main.gd" id="1_3amdw"]
 [ext_resource type="PackedScene" uid="uid://bh0jdnuunto56" path="res://Scene/sun.tscn" id="2_2wwxx"]
-[ext_resource type="PackedScene" uid="uid://br2pl52tr77ft" path="res://Scene/Planet.tscn" id="2_sblpm"]
 [ext_resource type="PackedScene" uid="uid://bnlfhn34us0pv" path="res://Scene/Player.tscn" id="3_r34rm"]
+[ext_resource type="FontFile" uid="uid://chkgjg0g2pund" path="res://Asset/Starborn.ttf" id="5_3amdw"]
+[ext_resource type="PackedScene" uid="uid://sjyifmf44crc" path="res://Scene/Fade.tscn" id="6_1xcnr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3amdw"]
 shader = ExtResource("1_2wwxx")
@@ -18,63 +19,75 @@ shader_parameter/layer_scale = 20.0
 shader_parameter/layer_scale_step = 10.0
 shader_parameter/layers_count = 5
 
-[sub_resource type="Sky" id="Sky_1xcnr"]
+[sub_resource type="Sky" id="Sky_2wwxx"]
 sky_material = SubResource("ShaderMaterial_3amdw")
 
 [sub_resource type="Environment" id="Environment_ow1sv"]
 background_mode = 2
-sky = SubResource("Sky_1xcnr")
+sky = SubResource("Sky_2wwxx")
+ambient_light_source = 1
+glow_enabled = true
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1xcnr"]
 radius = 25.596
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1xcnr"]
+bg_color = Color(0.32992, 0.59843, 0.984843, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ow1sv"]
+bg_color = Color(0.294118, 0.603922, 0.984314, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.984688, 0, 0)
 script = ExtResource("1_3amdw")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 400, 0)
-near = 0.045
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_ow1sv")
-
-[node name="Origin" type="Node3D" parent="."]
-
-[node name="Sun" parent="Origin" instance=ExtResource("2_2wwxx")]
-
-[node name="Area3D" type="Area3D" parent="Origin"]
-monitorable = false
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Origin/Area3D"]
-shape = SubResource("SphereShape3D_1xcnr")
-
-[node name="Planet" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("2_sblpm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 0, 0)
-center_node = NodePath("../Origin")
-color = Color(3.85046e-07, 0.601079, 0.938787, 1)
-
-[node name="Planet2" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("2_sblpm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 306.832, 0, 0)
-center_node = NodePath("../Origin")
-color = Color(2.21401e-06, 0.699078, 0.292285, 1)
-
-[node name="Planet3" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("2_sblpm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 610.7, 0, 0)
-center_node = NodePath("../Origin")
-color = Color(0.926249, 0.81047, 0, 1)
-
-[node name="Planet4" parent="." node_paths=PackedStringArray("center_node") instance=ExtResource("2_sblpm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 435.731, 0, 0)
-G_area = 30.0
-center_node = NodePath("../Planet2")
-color = Color(0.662874, 0.173669, 1, 1)
-
 [node name="Player" parent="." instance=ExtResource("3_r34rm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 612.096, 46.6847, 0.0367737)
 jump_strength = 40.0
 
-[node name="Control" type="Control" parent="."]
+[node name="Positions" type="Node" parent="."]
+
+[node name="position1" type="Node3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 150, 0, 0)
+
+[node name="position2" type="Node3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, 0, 0)
+
+[node name="position3" type="Node3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 450, 0, 0)
+
+[node name="position4" type="Node3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 600, 0, 0)
+
+[node name="Not_to_Delete" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Not_to_Delete"]
+environment = SubResource("Environment_ow1sv")
+
+[node name="Camera3D" type="Camera3D" parent="Not_to_Delete"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.984688, 645.374, -1.07256e-05)
+near = 0.045
+
+[node name="Origin" type="Node3D" parent="Not_to_Delete"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.984688, 0, 0)
+
+[node name="Sun" parent="Not_to_Delete/Origin" instance=ExtResource("2_2wwxx")]
+
+[node name="Area3D" type="Area3D" parent="Not_to_Delete/Origin"]
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Not_to_Delete/Origin/Area3D"]
+shape = SubResource("SphereShape3D_1xcnr")
+
+[node name="Control" type="Control" parent="Not_to_Delete"]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -83,46 +96,43 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="Control"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Not_to_Delete/Control"]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 13
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -170.0
-offset_top = -34.0
-offset_right = 179.0
-offset_bottom = 35.0
+anchor_bottom = 1.0
+offset_left = -350.0
+offset_top = 166.0
+offset_right = 352.0
+offset_bottom = -167.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.243137)
+theme_override_constants/separation = 300
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -31.5
-offset_top = -11.5
-offset_right = 31.5
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Label2" type="Label" parent="Control/HBoxContainer"]
+[node name="Label" type="Label" parent="Not_to_Delete/Control/VBoxContainer"]
+z_index = 2
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Points: "
-
-[node name="Label" type="Label" parent="Control/HBoxContainer"]
-layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("5_3amdw")
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_1xcnr")
 text = "Point"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="body_entered" from="Origin/Area3D" to="." method="_on_area_3d_body_entered"]
+[node name="return" type="Button" parent="Not_to_Delete/Control/VBoxContainer"]
+z_index = 3
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_fonts/font = ExtResource("5_3amdw")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/normal = SubResource("StyleBoxFlat_ow1sv")
+text = "menu
+"
+
+[node name="Control2" parent="Not_to_Delete" instance=ExtResource("6_1xcnr")]
+
+[connection signal="body_entered" from="Not_to_Delete/Origin/Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="pressed" from="Not_to_Delete/Control/VBoxContainer/return" to="." method="_on_return_pressed"]

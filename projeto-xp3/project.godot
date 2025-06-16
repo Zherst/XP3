@@ -11,9 +11,17 @@ config_version=5
 [application]
 
 config/name="Projeto XP3"
-run/main_scene="uid://djgvaculm4stc"
+run/main_scene="uid://duragoi831phu"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+AudioPlayer="*res://Scene/audio_player.tscn"
+
+[display]
+
+window/size/mode=3
 
 [input]
 

@@ -1,0 +1,69 @@
+[gd_scene load_steps=14 format=3 uid="uid://hgjd5610kubf"]
+
+[ext_resource type="Script" uid="uid://t4fqg24t8o8m" path="res://Scripts/OrbitManager.gd" id="1_uwo5q"]
+[ext_resource type="PackedScene" uid="uid://bbqs1r57v70y0" path="res://Scene/planetMesh/PlanetMesh3.tscn" id="2_os1bu"]
+[ext_resource type="PackedScene" uid="uid://b1gbjkk030tux" path="res://Scene/points_group.tscn" id="5_u72bx"]
+[ext_resource type="Script" uid="uid://dgjitwksbtmwg" path="res://Scripts/PointGravity.gd" id="6_2vqkb"]
+[ext_resource type="Script" uid="uid://cmf1h6ydjamx7" path="res://Scripts/fall_off_model.gd" id="7_kxrrf"]
+[ext_resource type="Shader" uid="uid://dn21ghu5dyd62" path="res://Shader/Water.gdshader" id="8_i76ay"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3hyrf"]
+radius = 0.314415
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4bn1e"]
+frequency = 0.09
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mleqy"]
+seamless = true
+as_normal_map = true
+bump_strength = 1.1
+noise = SubResource("FastNoiseLite_4bn1e")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rc85t"]
+frequency = 0.08
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_m2ef5"]
+seamless = true
+as_normal_map = true
+bump_strength = 2.1
+noise = SubResource("FastNoiseLite_rc85t")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_217pu"]
+render_priority = 0
+shader = ExtResource("8_i76ay")
+shader_parameter/uAlbedo = Color(0.429238, 0.594884, 0.188037, 1)
+shader_parameter/uTexureNormal = SubResource("NoiseTexture2D_mleqy")
+shader_parameter/uTexureNormal2 = SubResource("NoiseTexture2D_m2ef5")
+shader_parameter/uNormalMix = 0.2
+shader_parameter/uWaveDirection = Vector2(1, 0)
+shader_parameter/uWaveDirection2 = Vector2(0, 1)
+shader_parameter/uTimeScale = 0.019
+shader_parameter/uWaveScale = 1.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_h3iit"]
+material = SubResource("ShaderMaterial_217pu")
+
+[node name="Planet" type="Node3D"]
+script = ExtResource("1_uwo5q")
+G_area = 60.0
+center_mass = 100.0
+
+[node name="PlanetMesh" parent="." instance=ExtResource("2_os1bu")]
+
+[node name="GravityWell" type="Area3D" parent="."]
+monitoring = false
+script = ExtResource("6_2vqkb")
+
+[node name="BoundingShape" type="CollisionShape3D" parent="GravityWell"]
+shape = SubResource("SphereShape3D_3hyrf")
+
+[node name="FallOffModel" type="Node" parent="GravityWell"]
+script = ExtResource("7_kxrrf")
+start_radius = 52.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(39, 0, 0, 0, 39, 0, 0, 0, 39, 0, 0, 0)
+mesh = SubResource("SphereMesh_h3iit")
+
+[node name="points_group" parent="." instance=ExtResource("5_u72bx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0450306, 20.7301, -0.0544357)

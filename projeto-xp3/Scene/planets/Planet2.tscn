@@ -1,0 +1,32 @@
+[gd_scene load_steps=7 format=3 uid="uid://ddw0j32ydt4ps"]
+
+[ext_resource type="Script" uid="uid://t4fqg24t8o8m" path="res://Scripts/OrbitManager.gd" id="1_fm137"]
+[ext_resource type="PackedScene" uid="uid://d23op8bk1i133" path="res://Scene/planetMesh/PlanetMesh2.tscn" id="2_cnskw"]
+[ext_resource type="PackedScene" uid="uid://b1gbjkk030tux" path="res://Scene/points_group.tscn" id="5_0r2u4"]
+[ext_resource type="Script" uid="uid://dgjitwksbtmwg" path="res://Scripts/PointGravity.gd" id="6_hp7fj"]
+[ext_resource type="Script" uid="uid://cmf1h6ydjamx7" path="res://Scripts/fall_off_model.gd" id="7_s5c0l"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3hyrf"]
+radius = 0.314415
+
+[node name="Planet" type="Node3D"]
+script = ExtResource("1_fm137")
+G_area = 60.0
+center_mass = 100.0
+
+[node name="PlanetMesh" parent="." instance=ExtResource("2_cnskw")]
+
+[node name="points_group" parent="." instance=ExtResource("5_0r2u4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0450306, 23.3953, -0.0544357)
+visible = false
+
+[node name="GravityWell" type="Area3D" parent="."]
+monitoring = false
+script = ExtResource("6_hp7fj")
+
+[node name="BoundingShape" type="CollisionShape3D" parent="GravityWell"]
+shape = SubResource("SphereShape3D_3hyrf")
+
+[node name="FallOffModel" type="Node" parent="GravityWell"]
+script = ExtResource("7_s5c0l")
+start_radius = 52.0

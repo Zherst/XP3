@@ -3,7 +3,7 @@ render_mode specular_schlick_ggx;
 
 uniform float Glow_Power : hint_range(0,10) = 3;
 uniform float Lightness_Difference : hint_range(0,10) = 3;
-uniform vec4 Sun_Color : source_color;
+uniform vec4 Sun_Color : source_color = vec4(1,1,1,1);
 
 uniform sampler2D voronoi_noise;
 uniform sampler2D emission_noise;

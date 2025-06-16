@@ -24,7 +24,7 @@ func _on_resource_changed():
 		var face = child as PlanetMeshFace
 		if face:
 			face.regenerate_mesh(planet_data)
-		_update_collision(child)
+		#_update_collision(child)
 
 func _update_collision(mesh_instance: MeshInstance3D):
 
